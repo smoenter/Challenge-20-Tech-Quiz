@@ -14,16 +14,26 @@ jobs:
       # Checkout the repository
       - uses: actions/checkout@v3
 
-      # Install dependencies and run tests
-      - name: Test
+      # Install dependencies
+      - name: Install Dependencies
+        run: npm install
+
+      # Start the server
+      - name: Start Server
         run: |
-          npm install
-          npm run test
+          npm run start &
+          sleep 10
+
+      # Run Cypress Tests
+      - name: Run Cypress Tests
+        run: |
+          npx cypress install
+          npx cypress run
 
       # Deploy to Render
       - name: Deploy
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
         env:
           DEPLOY_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
         run: |
-          curl --fail "$DEPLOY_URL"  
+          curl --fail "$DEPLOY_URL"
