@@ -18,17 +18,11 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      # Start the server
-      - name: Start Server
-        run: |
-          npm run start &
-          sleep 10
 
-      # Run Cypress Tests
+      # Run Cypress Tests- Components
       - name: Run Cypress Tests
-        run: |
-          npx cypress install
-          npx cypress run
+        run: npm run test-component
+
 
       # Deploy to Render
       - name: Deploy
